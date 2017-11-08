@@ -13,7 +13,7 @@
 import UIKit
 
 @objc protocol ListGifsRoutingLogic {
-    //func routeToSomewhere(segue: UIStoryboardSegue?)
+    func routeToShowGif(segue: UIStoryboardSegue?)
 }
 
 protocol ListGifsDataPassing {
@@ -26,32 +26,34 @@ class ListGifsRouter: NSObject, ListGifsRoutingLogic, ListGifsDataPassing {
     
     // MARK: Routing
     
-    //func routeToSomewhere(segue: UIStoryboardSegue?)
-    //{
-    //  if let segue = segue {
-    //    let destinationVC = segue.destination as! SomewhereViewController
-    //    var destinationDS = destinationVC.router!.dataStore!
-    //    passDataToSomewhere(source: dataStore!, destination: &destinationDS)
-    //  } else {
-    //    let storyboard = UIStoryboard(name: "Main", bundle: nil)
-    //    let destinationVC = storyboard.instantiateViewController(withIdentifier: "SomewhereViewController") as! SomewhereViewController
-    //    var destinationDS = destinationVC.router!.dataStore!
-    //    passDataToSomewhere(source: dataStore!, destination: &destinationDS)
-    //    navigateToSomewhere(source: viewController!, destination: destinationVC)
-    //  }
-    //}
+    func routeToShowGif(segue: UIStoryboardSegue?)
+    {
+        if let segue = segue {
+            let destinationVC = segue.destination as! ShowGifViewController
+            var destinationDS = destinationVC.router!.dataStore!
+            passDataToShowGif(source: dataStore!, destination: &destinationDS)
+        } else {
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let destinationVC = storyboard.instantiateViewController(withIdentifier: "ShowGifViewController") as! ShowGifViewController
+            var destinationDS = destinationVC.router!.dataStore!
+            passDataToShowGif(source: dataStore!, destination: &destinationDS)
+            navigateToShowGif(source: viewController!, destination: destinationVC)
+        }
+    }
     
     // MARK: Navigation
     
-    //func navigateToSomewhere(source: ListGifsViewController, destination: SomewhereViewController)
-    //{
-    //  source.show(destination, sender: nil)
-    //}
+    func navigateToShowGif(source: ListGifsViewController, destination: ShowGifViewController)
+    {
+        source.show(destination, sender: nil)
+    }
     
     // MARK: Passing data
     
-    //func passDataToSomewhere(source: ListGifsDataStore, destination: inout SomewhereDataStore)
-    //{
-    //  destination.name = source.name
-    //}
+    func passDataToShowGif(source: ListGifsDataStore, destination: inout ShowGifDataStore)
+    {
+        let selected = viewController?.collectionView?.indexPathsForSelectedItems?.first?.row
+//        print("Selected gif \(selected) Data: \(source.gifs)")
+        destination.gif = source.gifs![selected!]
+    }
 }

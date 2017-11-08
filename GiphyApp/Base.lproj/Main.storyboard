@@ -1,24 +1,114 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.16" systemVersion="17A277" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="OGa-2h-dsN">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.12"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
-        <scene sceneID="tne-QT-ifu">
+        <!--Navigation Controller-->
+        <scene sceneID="4CI-oE-eAb">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                <navigationController id="OGa-2h-dsN" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="oa3-o0-RLe">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="zRJ-7F-57R" kind="relationship" relationship="rootViewController" id="nc7-Nr-j3j"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ySa-qb-Xtp" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-740" y="29"/>
+        </scene>
+        <!--List Gifs View Controller-->
+        <scene sceneID="l0q-2S-rvP">
+            <objects>
+                <collectionViewController id="zRJ-7F-57R" customClass="ListGifsViewController" customModule="GiphyApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="rOU-Bu-Oir">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                        <color key="backgroundColor" red="0.97254901960784312" green="0.97254901960784312" blue="0.97254901960784312" alpha="1" colorSpace="calibratedRGB"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="0se-CU-Ugm">
+                            <size key="itemSize" width="177" height="177"/>
+                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        </collectionViewFlowLayout>
+                        <cells>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="GifCell" id="0Yh-Ga-ecx" customClass="GifCell" customModule="GiphyApp" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="177" height="177"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                    <rect key="frame" x="0.0" y="0.0" width="177" height="177"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <imageView contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="eXy-OH-K8C" customClass="GIFAnimateImageView" customModule="GiphyApp" customModuleProvider="target">
+                                            <rect key="frame" x="0.0" y="0.0" width="177" height="177"/>
+                                        </imageView>
+                                    </subviews>
+                                </view>
+                                <color key="backgroundColor" red="0.7843137255" green="0.85098039219999999" blue="0.87843137250000003" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="eXy-OH-K8C" secondAttribute="trailing" id="5Xh-LV-Hwy"/>
+                                    <constraint firstItem="eXy-OH-K8C" firstAttribute="leading" secondItem="0Yh-Ga-ecx" secondAttribute="leading" id="Ler-Rb-gWn"/>
+                                    <constraint firstItem="eXy-OH-K8C" firstAttribute="top" secondItem="0Yh-Ga-ecx" secondAttribute="top" id="pgT-lS-c3L"/>
+                                    <constraint firstAttribute="bottom" secondItem="eXy-OH-K8C" secondAttribute="bottom" id="uIq-rb-dyi"/>
+                                </constraints>
+                                <connections>
+                                    <outlet property="gifImageView" destination="eXy-OH-K8C" id="N8W-tO-bYs"/>
+                                </connections>
+                            </collectionViewCell>
+                        </cells>
+                        <connections>
+                            <outlet property="dataSource" destination="zRJ-7F-57R" id="BaT-dM-E82"/>
+                            <outlet property="delegate" destination="zRJ-7F-57R" id="xNI-rE-NfN"/>
+                        </connections>
+                    </collectionView>
+                    <navigationItem key="navigationItem" id="O4H-Jw-rpc">
+                        <nil key="title"/>
+                    </navigationItem>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="2XQ-2F-SKL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="53.600000000000001" y="29.23538230884558"/>
+        </scene>
+        <!--Show Gif View Controller-->
+        <scene sceneID="Ojn-QF-hfo">
+            <objects>
+                <viewController storyboardIdentifier="ShowGifViewController" id="uOb-P2-WtG" customClass="ShowGifViewController" customModule="GiphyApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="AyA-Uj-Jlf">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="7Di-9B-zgA" customClass="GIFAnimateImageView" customModule="GiphyApp" customModuleProvider="target">
+                                <rect key="frame" x="16" y="106" width="343" height="257.5"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="7Di-9B-zgA" secondAttribute="height" multiplier="4:3" id="Lk5-54-6PQ"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="7Di-9B-zgA" firstAttribute="top" secondItem="qYP-iP-s2s" secondAttribute="top" constant="86" id="ELt-L1-8Qu"/>
+                            <constraint firstItem="7Di-9B-zgA" firstAttribute="leading" secondItem="qYP-iP-s2s" secondAttribute="leading" constant="16" id="I2C-SY-9va"/>
+                            <constraint firstItem="qYP-iP-s2s" firstAttribute="trailing" secondItem="7Di-9B-zgA" secondAttribute="trailing" constant="16" id="KSe-Rf-NI2"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="qYP-iP-s2s"/>
+                    </view>
+                    <connections>
+                        <outlet property="gifImageView" destination="7Di-9B-zgA" id="VDa-cX-AxJ"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="FxW-uh-R0n" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="933.60000000000002" y="27.436281859070466"/>
         </scene>
     </scenes>
 </document>

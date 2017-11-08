@@ -11,27 +11,47 @@
 //
 
 import UIKit
+import FLAnimatedImage
 
 protocol ListGifsBusinessLogic {
-    func doSomething(request: ListGifs.FetchGifs.Request)
+    func searchGif(request: ListGifs.FetchGifs.Request)
+    func fetchAllManagedGifs(request: ListGifs.FetchManagedGifs.Request)
 }
 
 protocol ListGifsDataStore {
-    //var name: String { get set }
+    var gifs: [Gif]? { get }
+    var gifData: [Data]? { get }
 }
 
 class ListGifsInteractor: ListGifsBusinessLogic, ListGifsDataStore {
     var presenter: ListGifsPresentationLogic?
     var worker: ListGifsWorker?
-    //var name: String = ""
+    var coreDataWorker: GifCoreDataWorker?
+    var gifs: [Gif]?
+    var gifData: [Data]?
     
-    // MARK: Do something
+    /// Searches by phrase gets corresponding gifs
+    ///
+    /// - request: List Gif Model Request
     
-    func doSomething(request: ListGifs.FetchGifs.Request) {
+    func searchGif(request: ListGifs.FetchGifs.Request) {
         worker = ListGifsWorker()
-        worker?.doSomeWork()
         
-        let response = ListGifs.FetchGifs.Response()
-        presenter?.presentSomething(response: response)
+        worker?.searchGif(phrase: request.phrase, completion: { gifs, error in
+            self.gifs = gifs
+            let response = ListGifs.FetchGifs.Response(gifs: gifs)
+            self.presenter?.presentFetchedGifs(response: response)
+        })
+    }
+    
+    func fetchAllManagedGifs(request: ListGifs.FetchManagedGifs.Request) {
+        coreDataWorker = GifCoreDataWorker()
+        
+        coreDataWorker?.allGifLists(completion: { data in
+            self.gifData = data
+            let response = ListGifs.FetchManagedGifs.Response(gifImages: data)
+            self.presenter?.presentFetchedManagedGifs(response: response)
+        })
+        
     }
 }

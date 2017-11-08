@@ -11,18 +11,37 @@
 //
 
 import UIKit
+import FLAnimatedImage
 
 protocol ListGifsPresentationLogic {
-    func presentSomething(response: ListGifs.FetchGifs.Response)
+    func presentFetchedGifs(response: ListGifs.FetchGifs.Response)
+    func presentFetchedManagedGifs(response: ListGifs.FetchManagedGifs.Response)
 }
 
 class ListGifsPresenter: ListGifsPresentationLogic {
     weak var viewController: ListGifsDisplayLogic?
     
-    // MARK: Do something
+    // MARK: Present fetched gifs
     
-    func presentSomething(response: ListGifs.FetchGifs.Response) {
-        let viewModel = ListGifs.FetchGifs.ViewModel()
-        viewController?.displaySomething(viewModel: viewModel)
+    func presentFetchedGifs(response: ListGifs.FetchGifs.Response) {
+        let displayedGifs = convertGifs(gifs: response.gifs)
+        let viewModel = ListGifs.FetchGifs.ViewModel(displayedGifs: displayedGifs)
+        self.viewController?.displayFetchedGifs(viewModel: viewModel)
     }
+    
+    func convertGifs(gifs: [Gif]) -> [ListGifs.FetchGifs.ViewModel.DisplayedGif] {
+        return gifs.map { ListGifs.FetchGifs.ViewModel.DisplayedGif(id: $0.id, gifURL: $0.gifURL) }
+    }
+    
+    func presentFetchedManagedGifs(response: ListGifs.FetchManagedGifs.Response) {
+        let displayedAnimatedImages = convertManagedGifs(data: response.gifImages)
+        let viewModel = ListGifs.FetchManagedGifs.ViewModel(displayedGifImages: displayedAnimatedImages)
+        self.viewController?.displayFetchedManagedGifs(viewModel: viewModel)
+        
+    }
+    
+    func convertManagedGifs(data images: [Data]) -> [ListGifs.FetchManagedGifs.ViewModel.DisplayedAnimatedImage] {
+        return images.map { ListGifs.FetchManagedGifs.ViewModel.DisplayedAnimatedImage(data: $0) }
+    }
+
 }

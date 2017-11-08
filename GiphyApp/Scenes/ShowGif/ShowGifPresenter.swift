@@ -13,7 +13,7 @@
 import UIKit
 
 protocol ShowGifPresentationLogic {
-    func presentSomething(response: ShowGif.Something.Response)
+    func presentGif(response: ShowGif.GetGif.Response)
 }
 
 class ShowGifPresenter: ShowGifPresentationLogic {
@@ -21,8 +21,10 @@ class ShowGifPresenter: ShowGifPresentationLogic {
     
     // MARK: Do something
     
-    func presentSomething(response: ShowGif.Something.Response) {
-        let viewModel = ShowGif.Something.ViewModel()
-        viewController?.displaySomething(viewModel: viewModel)
+    func presentGif(response: ShowGif.GetGif.Response) {
+        let gif = response.gif
+        let displayedGif = ShowGif.GetGif.ViewModel.DisplayedGif(gif: gif)
+        let viewModel = ShowGif.GetGif.ViewModel(displayedGif: displayedGif)
+        viewController?.displayGif(viewModel: viewModel)
     }
 }

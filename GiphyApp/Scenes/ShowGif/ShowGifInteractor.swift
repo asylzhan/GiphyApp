@@ -11,27 +11,30 @@
 //
 
 import UIKit
+import FLAnimatedImage
 
 protocol ShowGifBusinessLogic {
-    func doSomething(request: ShowGif.Something.Request)
+    func getGif(request: ShowGif.GetGif.Request)
 }
 
 protocol ShowGifDataStore {
-    //var name: String { get set }
+    var gif: Gif! { get set }
 }
 
 class ShowGifInteractor: ShowGifBusinessLogic, ShowGifDataStore {
     var presenter: ShowGifPresentationLogic?
     var worker: ShowGifWorker?
+    
+    var gif: Gif!
     //var name: String = ""
     
     // MARK: Do something
     
-    func doSomething(request: ShowGif.Something.Request) {
+    func getGif(request: ShowGif.GetGif.Request) {
         worker = ShowGifWorker()
         worker?.doSomeWork()
         
-        let response = ShowGif.Something.Response()
-        presenter?.presentSomething(response: response)
+        let response = ShowGif.GetGif.Response(gif: gif)
+        presenter?.presentGif(response: response)
     }
 }

@@ -9,6 +9,7 @@ target 'GiphyApp' do
   pod 'Alamofire', '~> 4.5'
   pod 'SwiftyJSON'
   pod 'MBProgressHUD', '~> 1.0.0'
+  pod 'FLAnimatedImage', '~> 1.0'
 
   target 'GiphyAppTests' do
     inherit! :search_paths

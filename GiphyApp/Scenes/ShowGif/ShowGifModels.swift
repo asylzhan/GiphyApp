@@ -11,16 +11,23 @@
 //
 
 import UIKit
+import FLAnimatedImage
 
 enum ShowGif {
     // MARK: Use cases
     
-    enum Something {
+    enum GetGif {
         struct Request {
+            
         }
         struct Response {
+            var gif: Gif
         }
         struct ViewModel {
+            struct DisplayedGif {
+                let gif: Gif
+            }
+            var displayedGif: DisplayedGif
         }
     }
 }

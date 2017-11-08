@@ -11,8 +11,14 @@
 //
 
 import UIKit
+import FLAnimatedImage
 
 class ListGifsWorker {
-    func doSomeWork() {
+    let gifAPI: GiphyAPIProtocol = APIService()
+    
+    func searchGif(phrase: String, completion: @escaping ([Gif],Error?) -> Void) {
+        gifAPI.searchGifs(phrase: phrase) { gifs, error in
+            completion(gifs, error)
+        }
     }
 }

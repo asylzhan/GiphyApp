@@ -11,16 +11,58 @@
 //
 
 import UIKit
+import FLAnimatedImage
+
+
 
 enum ListGifs {
     // MARK: Use cases
     
+//    static var eventWorker = EventCoreDataWorker.shared
+
     enum FetchGifs {
         struct Request {
+            var phrase: String
         }
+        
         struct Response {
+            var gifs: [Gif]
         }
+        
         struct ViewModel {
+            struct DisplayedGif {
+                let id: String
+                let gifURL: String
+            }
+            var displayedGifs: [DisplayedGif]
         }
     }
+    
+    enum FetchManagedGifs {
+        struct Request {
+            
+        }
+        
+        struct Response {
+            var gifImages: [Data]
+        }
+        
+        struct ViewModel {
+            struct DisplayedAnimatedImage {
+                let gifImage: FLAnimatedImage
+            }
+            var displayedGifImages: [DisplayedAnimatedImage]
+            
+        }
+    }
+    
 }
+
+extension ListGifs.FetchManagedGifs.ViewModel.DisplayedAnimatedImage {
+    init(data: Data) {
+        gifImage = FLAnimatedImage(animatedGIFData: data, optimalFrameCacheSize: 160, predrawingEnabled: false)
+    }
+}
+
+
+

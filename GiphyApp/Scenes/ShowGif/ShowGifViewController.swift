@@ -11,9 +11,10 @@
 //
 
 import UIKit
+import FLAnimatedImage
 
 protocol ShowGifDisplayLogic: class {
-    func displaySomething(viewModel: ShowGif.Something.ViewModel)
+    func displayGif(viewModel: ShowGif.GetGif.ViewModel)
 }
 
 class ShowGifViewController: UIViewController, ShowGifDisplayLogic {
@@ -58,23 +59,27 @@ class ShowGifViewController: UIViewController, ShowGifDisplayLogic {
         }
     }
     
+    // MARK: Outlet property
+    
+    @IBOutlet weak var gifImageView: GIFAnimateImageView!
+    
     // MARK: View lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        doSomething()
+        getGif()
     }
     
     // MARK: Do something
-    
-    //@IBOutlet weak var nameTextField: UITextField!
-    
-    func doSomething() {
-        let request = ShowGif.Something.Request()
-        interactor?.doSomething(request: request)
+        
+    func getGif() {
+        let request = ShowGif.GetGif.Request()
+        interactor?.getGif(request: request)
     }
     
-    func displaySomething(viewModel: ShowGif.Something.ViewModel) {
-        //nameTextField.text = viewModel.name
+    func displayGif(viewModel: ShowGif.GetGif.ViewModel) {
+        let url = viewModel.displayedGif.gif.gifURL
+        gifImageView.loadImage(url)
+        print("Displayed gif: \(viewModel.displayedGif)")
     }
 }
