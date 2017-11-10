@@ -13,39 +13,28 @@ let imageCache = NSCache<AnyObject, AnyObject>()
 
 class GIFAnimateImageView: FLAnimatedImageView {
     var imageUrlString: String?
+    var imageData: Data?
     
-    func loadImage(_ mediaURL: String, completion: @escaping (Data) -> Void ) {
-        imageUrlString = mediaURL
-        
-        let url = URL(string: "\(mediaURL)")
+    func loadImage(data: Data ) {
+        imageData = data
         
         animatedImage = nil
         
-        if let imageFromCache = imageCache.object(forKey: url as AnyObject) as? FLAnimatedImage {
+        if let imageFromCache = imageCache.object(forKey: data.count as AnyObject) as? FLAnimatedImage {
             self.animatedImage = imageFromCache
             return
         }
         
-        URLSession.shared.dataTask(with: url!, completionHandler: { (data, respones, error) in
-            
-            if error != nil {
-                print(error ?? "")
-                return
-            }
-            
-            completion(data!)
+        DispatchQueue.global(qos: .background).async {
+            let imageToCache = FLAnimatedImage(animatedGIFData: data, optimalFrameCacheSize: 0, predrawingEnabled: false)
             DispatchQueue.main.async(execute: {
-                
-                let imageToCache = FLAnimatedImage(animatedGIFData: data, optimalFrameCacheSize: 160, predrawingEnabled: false)
-                
-                if self.imageUrlString == mediaURL {
+                if self.imageData?.count == data.count {
                     self.animatedImage = imageToCache
                 }
-                
-                imageCache.setObject(imageToCache!, forKey: url as AnyObject)
+                imageCache.setObject(imageToCache!, forKey: data.count as AnyObject)
             })
-            
-        }).resume()
+        }
+
     }
     
     func loadImage(_ mediaURL: String) {
@@ -59,18 +48,15 @@ class GIFAnimateImageView: FLAnimatedImageView {
             self.animatedImage = imageFromCache
             return
         }
-        
+
         URLSession.shared.dataTask(with: url!, completionHandler: { (data, respones, error) in
             
             if error != nil {
                 print(error ?? "")
                 return
             }
-            
+            let imageToCache = FLAnimatedImage(animatedGIFData: data, optimalFrameCacheSize: 0, predrawingEnabled: false)
             DispatchQueue.main.async(execute: {
-                
-                let imageToCache = FLAnimatedImage(animatedGIFData: data, optimalFrameCacheSize: 160, predrawingEnabled: false)
-                
                 if self.imageUrlString == mediaURL {
                     self.animatedImage = imageToCache
                 }
@@ -80,26 +66,5 @@ class GIFAnimateImageView: FLAnimatedImageView {
             
         }).resume()
     }
-}
-
-class GifAnimatedManager {
-    
-    static let shared = GifAnimatedManager()
-    private init() {}
-    
-    func loadImage(_ mediaURL: String, completion: @escaping () -> FLAnimatedImage) {
-        let url = URL(string: "\(mediaURL)")
-        URLSession.shared.dataTask(with: url!, completionHandler: { (data, respones, error) in
-            
-            if error != nil {
-                print(error ?? "")
-                return
-            }
-            
-            let imageData = FLAnimatedImage(animatedGIFData: data, optimalFrameCacheSize: 1, predrawingEnabled: false)
-            
-        }).resume()
-    }
-    
 }
 

@@ -2,7 +2,7 @@
 //  ManagedGif+CoreDataClass.swift
 //  GiphyApp
 //
-//  Created by asylzhan on 11/7/17.
+//  Created by asylzhan on 11/10/17.
 //  Copyright © 2017 asylzhan. All rights reserved.
 //
 //

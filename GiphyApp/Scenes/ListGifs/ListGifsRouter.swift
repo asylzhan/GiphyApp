@@ -53,7 +53,6 @@ class ListGifsRouter: NSObject, ListGifsRoutingLogic, ListGifsDataPassing {
     func passDataToShowGif(source: ListGifsDataStore, destination: inout ShowGifDataStore)
     {
         let selected = viewController?.collectionView?.indexPathsForSelectedItems?.first?.row
-//        print("Selected gif \(selected) Data: \(source.gifs)")
         destination.gif = source.gifs![selected!]
     }
 }

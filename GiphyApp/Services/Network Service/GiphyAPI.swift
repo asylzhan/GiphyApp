@@ -9,10 +9,13 @@
 import Foundation
 import FLAnimatedImage
 
-//typealias responseHandler = (_ response: @escaping ([Gif], Error?) -> Void)
+
 protocol GiphyAPIProtocol
 {
     func searchGifs(phrase: String, completion: @escaping ([Gif], Error?) -> Void)
+    func fetchTrendingGifs(completion: @escaping ([Gif], Error?) -> Void)
+    func fetchAnimatedImages(urls: [String], completion: @escaping ([FLAnimatedImage], Error?) -> Void)
+    func fetchImagesData(urls: [String], completion: @escaping ([Data], Error?) -> Void)
 }
 
 
@@ -24,6 +27,7 @@ struct GiphyAPI {
     static let key = "yi7GzFEfeWbLB7zRq04HJti8tRhnzHB3"
     static let baseURLString = "https://api.giphy.com"
     static let searchPath = "/v1/gifs/search"
+    static let trendingPath = "/v1/gifs/trending"
 }
 
 // MARK: - GiphyAPIError
@@ -45,6 +49,7 @@ enum GiphyAPIError: Error {
 ///
 /// - searchGif:  Search all GIPHY GIFs for a word or phrase request
 enum GiphyAPIEndPoint {
+    case fetchTrendingGifs()
     case searchGif(String)
 }
 
@@ -56,12 +61,13 @@ protocol URLConvertible {
     func url() -> URL?
 }
 
-
 extension GiphyAPIEndPoint: URLConvertible {
     func url() -> URL? {
         switch self {
         case .searchGif(let phrase):
             return URL(string: "\(GiphyAPI.baseURLString)\(GiphyAPI.searchPath)?api_key=\(GiphyAPI.key)&q=\(phrase)")
+        case .fetchTrendingGifs():
+            return URL(string: "\(GiphyAPI.baseURLString)\(GiphyAPI.trendingPath)?api_key=\(GiphyAPI.key)")
         }
     }
 }

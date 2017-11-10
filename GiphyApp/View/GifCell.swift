@@ -18,7 +18,7 @@ class GifCell: UICollectionViewCell {
     var viewModel: ListGifs.FetchGifs.ViewModel.DisplayedGif? {
         didSet {            
             if let viewModel = viewModel {
-                gifImageView.loadImage(viewModel.gifURL)
+                gifImageView.loadImage(viewModel.url)
             }
         }
     }
@@ -26,7 +26,7 @@ class GifCell: UICollectionViewCell {
     var animatedViewModel: ListGifs.FetchManagedGifs.ViewModel.DisplayedAnimatedImage? {
         didSet {
             if let viewModel = animatedViewModel {
-                gifImageView.animatedImage = viewModel.gifImage
+                gifImageView.loadImage(data: viewModel.gifImage)
             }
         }
     }

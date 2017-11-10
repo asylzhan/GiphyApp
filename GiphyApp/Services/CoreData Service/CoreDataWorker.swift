@@ -10,8 +10,8 @@ import Foundation
 import FLAnimatedImage
 import CoreData
 
+
 extension ManagedGif {
-    
     func fromGif(imageData: Data) {
         gifImage = imageData as NSData
     }
@@ -22,7 +22,6 @@ extension ManagedGif {
 }
 
 final class GifCoreDataWorker: GifWorkerAPI {
-    
     // MARK: - Object lifecycle
     
     let entityName = "ManagedGif"
@@ -50,14 +49,13 @@ final class GifCoreDataWorker: GifWorkerAPI {
     
     func save() {
         let fetch = NSFetchRequest<ManagedGif>(entityName: entityName)
-
         fetch.predicate = NSPredicate(format: "gifImage != nil")
         
         let count = try! managedObjectContext.count(for: fetch)
         
-//        if count > 0 {
-//            deleteAllRecords()
-//        }
+        if count > 0 {
+            deleteAllRecords()
+        }
         
         if managedObjectContext.hasChanges {
             do {
@@ -69,14 +67,38 @@ final class GifCoreDataWorker: GifWorkerAPI {
         }
     }
     
-    func addNew(gifData: Data) {
-        let managedEvent = ManagedGif(context: managedObjectContext)
-        managedEvent.gifImage = gifData as NSData
-        save()
+    
+    func add(imagesData: [Data]) {
+        let fetch = NSFetchRequest<ManagedGif>(entityName: entityName)
+        fetch.predicate = NSPredicate(format: "gifImage != nil")
+        
+        let count = try! managedObjectContext.count(for: fetch)
+        
+        if count >= 25 {
+            deleteAllRecords()
+        }
+        
+        for data in imagesData {
+            let entity = NSEntityDescription.entity(forEntityName: entityName, in: managedObjectContext)!
+            let managedGif = ManagedGif(entity: entity, insertInto: managedObjectContext)
+            managedGif.gifImage = data as NSData
+        }
+        
+//        if managedObjectContext.hasChanges {
+//            do {
+//            } catch {
+//                let nserror = error as NSError
+//                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+//            }
+//        }
+        try! managedObjectContext.save()
+        print("Data Saved.")
     }
     
-    func allGifLists(completion: ([Data]) -> Void) {
+    func getGifs(completion: ([Data]) -> Void) {
         let request = NSFetchRequest<ManagedGif>(entityName: entityName)
+        request.fetchBatchSize = 25
+
         do {
             let results = try managedObjectContext.fetch(request)
             let data = results.map { $0.toGif() }
@@ -87,7 +109,6 @@ final class GifCoreDataWorker: GifWorkerAPI {
     }
     
     func deleteAllRecords() {
-        
         let deleteFetch = NSFetchRequest<NSFetchRequestResult>(entityName: entityName)
         let deleteRequest = NSBatchDeleteRequest(fetchRequest: deleteFetch)
         
@@ -98,9 +119,4 @@ final class GifCoreDataWorker: GifWorkerAPI {
             print ("There was an error while deleting!")
         }
     }
-    
-    //    func show(at indexPath: IndexPath) -> Gif
-    //    {
-    //        return fetchedResultsController.object(at: indexPath).toEvent()
-    //    }
 }

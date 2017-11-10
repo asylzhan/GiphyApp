@@ -13,7 +13,8 @@
 import UIKit
 
 protocol ListGifsDisplayLogic: class {
-    func displayFetchedGifs(viewModel: ListGifs.FetchGifs.ViewModel)
+    func displayFetchedTrendingGifs(viewModel: ListGifs.FetchGifs.ViewModel)
+    func displaySearchedGifs(viewModel: ListGifs.FetchGifs.ViewModel)
     func displayFetchedManagedGifs(viewModel: ListGifs.FetchManagedGifs.ViewModel)
 }
 
@@ -77,6 +78,7 @@ class ListGifsViewController: UICollectionViewController, ListGifsDisplayLogic {
     
     var displayedGifs: [ListGifs.FetchGifs.ViewModel.DisplayedGif] = []
     var displayedManagedGifs: [ListGifs.FetchManagedGifs.ViewModel.DisplayedAnimatedImage] = []
+    var isManagedGif = false
     
     // MARK: View lifecycle
     
@@ -85,26 +87,47 @@ class ListGifsViewController: UICollectionViewController, ListGifsDisplayLogic {
         navigationItem.title = "Giphy"
         setupSearchController()
         
+        fetchManagedGifs()
         if Reachability.isConnectedToInternet() {
-            fetchGifs(phrase:"2pac")
-        } else {
-            fetchManagedGifs()
+            fetchTrendingGifs()
         }
     }
     
-    @objc func fetchGifs(phrase: String) {
+    // MARK: Request Interactor
+    
+    func fetchTrendingGifs() {
+        let request = ListGifs.FetchGifs.Request()
+        interactor?.fetchTrendingGifs(request: request)
+    }
+    
+    @objc func searchGifs(phrase: String) {
         let request = ListGifs.FetchGifs.Request(phrase: phrase)
         interactor?.searchGif(request: request)
+        isManagedGif = false
     }
     
     func fetchManagedGifs() {
         let request = ListGifs.FetchManagedGifs.Request()
-        interactor?.fetchAllManagedGifs(request: request)
+        interactor?.fetchManagedGifs(request: request)
+        isManagedGif = true
+    }
+    
+    func fetchImageDataInBackground(urls: [String]) {
+        let request = ListGifs.FetchGifs.Request(urls: urls)
+        interactor?.fetchImagesData(request: request)
     }
     
     // MARK: ListGifDisplayLogic protocol
     
-    func displayFetchedGifs(viewModel: ListGifs.FetchGifs.ViewModel) {
+    func displayFetchedTrendingGifs(viewModel: ListGifs.FetchGifs.ViewModel) {
+        isManagedGif = false
+        self.displayedGifs = viewModel.displayedGifs
+        let urls = viewModel.displayedGifs.map { $0.url }
+        runOnMainThread()
+        fetchImageDataInBackground(urls: urls)
+    }
+    
+    func displaySearchedGifs(viewModel: ListGifs.FetchGifs.ViewModel) {
         displayedGifs = viewModel.displayedGifs
         runOnMainThread()
     }
@@ -128,14 +151,22 @@ class ListGifsViewController: UICollectionViewController, ListGifsDisplayLogic {
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! GifCell
+        cell.listGifsVC = self
+        
         if Reachability.isConnectedToInternet() {
-            cell.viewModel = displayedGifs[indexPath.row]
-            cell.listGifsVC = self
+            if isManagedGif {
+                cell.animatedViewModel = displayedManagedGifs[indexPath.row]
+            } else {
+                cell.viewModel = displayedGifs[indexPath.row]
+            }
         } else {
             cell.animatedViewModel = displayedManagedGifs[indexPath.row]
         }
+        
         return cell
     }
+    
+    // MARK: Helper properties
     
     let blackBackgroundView = UIView()
     let zoomImageView = GIFAnimateImageView()
@@ -202,16 +233,23 @@ class ListGifsViewController: UICollectionViewController, ListGifsDisplayLogic {
 }
 
 extension ListGifsViewController: UISearchResultsUpdating {
+    
     // MARK: updateSearchResults
+    
     func updateSearchResults(for searchController: UISearchController) {
         print("\(String(describing: searchController.searchBar.text))")
         if searchBarIsEmpty() {
-            return
+            if displayedManagedGifs.count > 0 && !isManagedGif {
+                isManagedGif = true
+                runOnMainThread()
+            } else if displayedManagedGifs.count <= 0 && isManagedGif {
+                return
+            }
         } else {
             let text = searchController.searchBar.text!
-            fetchGifs(phrase: text)
-            //            NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(fetchGifs(phrase:)), object: nil)
-            //            self.perform(#selector(fetchGifs(phrase:)), with: text, afterDelay: 0.5)
+//            searchGifs(phrase: text)
+            NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(searchGifs(phrase:)), object: nil)
+            self.perform(#selector(searchGifs(phrase:)), with: text, afterDelay: 0.5)
         }
     }
     

@@ -78,8 +78,7 @@ class ShowGifViewController: UIViewController, ShowGifDisplayLogic {
     }
     
     func displayGif(viewModel: ShowGif.GetGif.ViewModel) {
-        let url = viewModel.displayedGif.gif.gifURL
+        let url = viewModel.displayedGif.gif.url
         gifImageView.loadImage(url)
-        print("Displayed gif: \(viewModel.displayedGif)")
     }
 }

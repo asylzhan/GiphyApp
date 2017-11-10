@@ -16,18 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        
-        // Retrieve test bow tie
-//        do {
-//            let request = NSFetchRequest<ManagedGif>(entityName: "ManagedGif")
-//            let gifs = try self.persistentContainer.viewContext.fetch(request)
-//            if let gifData = gifs.first?.gifImage, let gifData2 = gifs.last?.gifImage, let thirdData = gifs[1].gifImage {
-//                print("First: \(gifData), and\nLast: \(gifData2), 3rd: \(thirdData)")
-//            }
-//            print("Name :\(gifs)")
-//        } catch let error as NSError {
-//            print("Fetching error: \(error), \(error.userInfo)")
-//        }
+       
         return true
     }
 

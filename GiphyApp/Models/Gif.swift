@@ -11,14 +11,15 @@ import SwiftyJSON
 import FLAnimatedImage
 import Alamofire
 
+
 struct Gif {
     let id: String
-    let gifURL: String
+    let url: String
 }
 
 extension Gif {
     init(json: JSON) {
         self.id = json["id"].stringValue
-        self.gifURL = json["images"]["fixed_width"]["url"].stringValue
+        self.url = json["images"]["fixed_width"]["url"].stringValue
     }
 }

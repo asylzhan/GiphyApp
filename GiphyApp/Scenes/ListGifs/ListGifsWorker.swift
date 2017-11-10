@@ -14,11 +14,27 @@ import UIKit
 import FLAnimatedImage
 
 class ListGifsWorker {
+    // MARK: Property
+    
     let gifAPI: GiphyAPIProtocol = APIService()
     
-    func searchGif(phrase: String, completion: @escaping ([Gif],Error?) -> Void) {
+    // MARK: Worker methods
+    
+    func searchGif(phrase: String, completion: @escaping ([Gif], Error?) -> Void) {
         gifAPI.searchGifs(phrase: phrase) { gifs, error in
             completion(gifs, error)
+        }
+    }
+    
+    func fetchTrendingGifs(completion: @escaping ([Gif], Error?) -> Void) {
+        gifAPI.fetchTrendingGifs { gifs, error in
+            completion(gifs, error)
+        }
+    }
+    
+    func fetchImagesData(urls: [String], completion: @escaping ([Data], Error?) -> Void) {
+        gifAPI.fetchImagesData(urls: urls) { imagesData, error in
+            completion(imagesData, error)
         }
     }
 }

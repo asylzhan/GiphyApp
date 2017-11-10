@@ -17,9 +17,7 @@ enum ShowGif {
     // MARK: Use cases
     
     enum GetGif {
-        struct Request {
-            
-        }
+        struct Request {}
         struct Response {
             var gif: Gif
         }
